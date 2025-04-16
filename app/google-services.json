@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "575769833730",
+    "project_id": "boswo-s-firebase",
+    "storage_bucket": "boswo-s-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575769833730:android:256bc7b96e68b2b499921b",
+        "android_client_info": {
+          "package_name": "com.dang.boswos_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7skZDG8Wfyox2F71sdfJjhRy3srt7aP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
