@@ -30,6 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dang.boswos_firebase.data.productviewmodel
+import com.dang.boswos_firebase.model.Product
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.nio.file.WatchEvent
 
 
 @Composable
@@ -55,12 +62,13 @@ fun UpdateProductsScreen(navController: NavHostController,id:String) {
                 Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             }
         })
+        Spacer(modifier = Modifier.height(50.dp))
 
         Text(
             text = "Add product",
             fontSize = 30.sp,
-            fontFamily = FontFamily.Cursive,
-            color = Color.Red,
+            fontFamily = FontFamily.Monospace,
+            color = Color.Blue,
             modifier = Modifier.padding(20.dp),
             fontWeight = FontWeight.Bold,
             textDecoration = TextDecoration.Underline

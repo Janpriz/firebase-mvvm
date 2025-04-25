@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.dang.boswos_firebase"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -42,6 +42,8 @@ android {
 
 dependencies {
     implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

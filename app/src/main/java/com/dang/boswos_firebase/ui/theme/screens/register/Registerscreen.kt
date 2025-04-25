@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dang.boswos_firebase.navigation.ROUTE_LOGIN
+import com.firebaseone.data.AuthViewModel
 
 
 @Composable
@@ -102,11 +104,6 @@ fun RegisterScreen(navController:NavHostController) {
 
 
 
-}
-
-@Composable
-fun Button(onClick: () -> signup, modifier: Modifier, content: @Composable () -> Unit) {
-    TODO("Not yet implemented")
 }
 
 @Preview

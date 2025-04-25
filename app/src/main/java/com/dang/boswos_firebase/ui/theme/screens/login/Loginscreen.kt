@@ -28,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dang.boswos_firebase.navigation.ROUTE_HOME
 import com.dang.boswos_firebase.navigation.ROUTE_REGISTER
+import com.firebaseone.data.AuthViewModel
 
 
 @Composable
@@ -39,12 +41,14 @@ fun LoginScreen(navController:NavHostController) {
     var context= LocalContext.current
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(Color.Blue),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+        Spacer(modifier = Modifier.height(50.dp))
 
         Text(text = "Login here",
             color = Color.Cyan,
-            fontFamily = FontFamily.Cursive,
+            fontFamily = FontFamily.Monospace,
             fontSize = 30.sp)
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -68,6 +72,7 @@ fun LoginScreen(navController:NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
+//            navController.navigate(ROUTE_HOME)
             val mylogin= AuthViewModel(navController, context )
             mylogin.login(email.text.trim(),pass.text.trim())
         }, modifier = Modifier.fillMaxWidth()) {

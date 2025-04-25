@@ -9,6 +9,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dang.boswos_firebase.ui.theme.screens.home.HomeScreen
 import com.dang.boswos_firebase.ui.theme.screens.login.LoginScreen
+import com.dang.boswos_firebase.ui.theme.screens.products.AddProductsScreen
+import com.dang.boswos_firebase.ui.theme.screens.products.UpdateProductsScreen
+import com.dang.boswos_firebase.ui.theme.screens.products.ViewProductsScreen
+import com.dang.boswos_firebase.ui.theme.screens.products.ViewUploadsScreen
 import com.dang.boswos_firebase.ui.theme.screens.register.RegisterScreen
 
 

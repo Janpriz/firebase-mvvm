@@ -1,5 +1,6 @@
 package com.dang.boswos_firebase.ui.theme.screens.home
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,10 +29,11 @@ import com.dang.boswos_firebase.navigation.ROUTE_VIEW_UPLOAD
 fun HomeScreen(navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(Color.Red),
+        .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally) {
         var context= LocalContext.current
 //        var productdata=productviewmodel(navController,context)
+        Spacer(modifier = Modifier.height(50.dp))
 
         Text(text = "Welcome to Home page",
             color = Color.Cyan,

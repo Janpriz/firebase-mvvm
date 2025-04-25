@@ -25,7 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dang.boswos_firebase.data.productviewmodel
+import com.dang.boswos_firebase.model.Product
 import com.dang.boswos_firebase.navigation.ROUTE_UPDATE_PRODUCT
+import kotlinx.coroutines.sync.Mutex
 
 
 @Composable
@@ -46,10 +49,11 @@ fun ViewProductsScreen(navController:NavHostController) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(50.dp))
             Text(text = "All products",
                 fontSize = 30.sp,
-                fontFamily = FontFamily.Cursive,
-                color = Color.Red)
+                fontFamily = FontFamily.Monospace,
+                color = Color.Blue)
 
             Spacer(modifier = Modifier.height(20.dp))
 
