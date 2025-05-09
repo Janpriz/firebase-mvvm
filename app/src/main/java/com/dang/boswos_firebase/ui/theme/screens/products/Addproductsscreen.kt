@@ -33,10 +33,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dang.boswos_firebase.data.productviewmodel
+import com.dang.boswos_firebase.navigation.ROUTE_UPLOAD
 import com.dang.boswos_firebase.navigation.ROUTE_VIEW_PRODUCT
+//import com.dang.boswos_firebase.navigation.ROUTE_upload
 
 @Composable
 fun AddProductsScreen(navController: NavHostController) {
@@ -57,6 +60,9 @@ fun AddProductsScreen(navController: NavHostController) {
         var productName by remember { mutableStateOf(TextFieldValue("")) }
         var productQuantity by remember { mutableStateOf(TextFieldValue("")) }
         var productPrice by remember { mutableStateOf(TextFieldValue("")) }
+        var picture by remember { mutableStateOf(TextFieldValue("")) }
+
+
 
         OutlinedTextField(
             value = productName,
@@ -100,7 +106,8 @@ fun AddProductsScreen(navController: NavHostController) {
 
         //---------------------IMAGE PICKER START-----------------------------------//
 
-        ImagePicker(Modifier,context, navController, productName.text.trim(), productQuantity.text.trim(), productPrice.text.trim())
+        ImagePicker(Modifier,context,
+            navController, productName.text.trim(), productQuantity.text.trim(), productPrice.text.trim())
 
         //---------------------IMAGE PICKER END-----------------------------------//
 
@@ -141,6 +148,7 @@ fun ImagePicker(modifier: Modifier = Modifier, context: Context, navController: 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(onClick = {
+                navController.navigate(ROUTE_UPLOAD)
                 //-----------WRITE THE UPLOAD LOGIC HERE---------------//
                 var productRepository = productviewmodel(navController,context)
                 productRepository.saveProductWithImage(name, quantity, price,imageUri!!)

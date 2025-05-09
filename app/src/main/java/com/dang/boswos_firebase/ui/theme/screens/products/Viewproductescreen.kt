@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
 
 
@@ -26,7 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dang.boswos_firebase.data.productviewmodel
-import com.dang.boswos_firebase.model.Product
+import com.dang.boswos_firebase.model.House
+
 import com.dang.boswos_firebase.navigation.ROUTE_UPDATE_PRODUCT
 import kotlinx.coroutines.sync.Mutex
 
@@ -38,8 +40,8 @@ fun ViewProductsScreen(navController:NavHostController) {
 
         var context = LocalContext.current
         var productRepository = productviewmodel(navController, context)
-        val emptyProductState = remember { mutableStateOf(Product("","","","")) }
-        var emptyProductsListState = remember { mutableStateListOf<Product>() }
+        val emptyProductState = remember { mutableStateOf(House("","","","")) }
+        var emptyProductsListState = remember { mutableStateListOf<House>() }
 
         var products = productRepository.viewProducts(emptyProductState, emptyProductsListState)
 
@@ -47,22 +49,27 @@ fun ViewProductsScreen(navController:NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+
         ) {
             Spacer(modifier = Modifier.height(50.dp))
-            Text(text = "All products",
+            Text(text = "All houses",
                 fontSize = 30.sp,
                 fontFamily = FontFamily.Monospace,
                 color = Color.Blue)
 
             Spacer(modifier = Modifier.height(20.dp))
 
+
             LazyColumn(){
+
                 items(products){
                     ProductItem(
                         name = it.name,
-                        quantity = it.quantity,
+                        description = it.description,
                         price = it.price,
+
                         id = it.id,
                         navController = navController,
                         productRepository = productRepository
@@ -75,12 +82,12 @@ fun ViewProductsScreen(navController:NavHostController) {
 }
 
 @Composable
-fun ProductItem(name:String, quantity:String, price:String, id:String,
+fun ProductItem(name:String, description:String, price:String, id:String,
                 navController:NavHostController, productRepository:productviewmodel) {
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(text = name)
-        Text(text = quantity)
+        Text(text = description)
         Text(text = price)
         Button(onClick = {
             productRepository.deleteProduct(id)

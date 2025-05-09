@@ -72,7 +72,7 @@ fun LoginScreen(navController:NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-//            navController.navigate(ROUTE_HOME)
+            navController.navigate(ROUTE_HOME)
             val mylogin= AuthViewModel(navController, context )
             mylogin.login(email.text.trim(),pass.text.trim())
         }, modifier = Modifier.fillMaxWidth()) {

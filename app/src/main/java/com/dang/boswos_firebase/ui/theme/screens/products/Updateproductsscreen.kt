@@ -31,7 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dang.boswos_firebase.data.productviewmodel
-import com.dang.boswos_firebase.model.Product
+import com.dang.boswos_firebase.model.House
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -52,9 +53,9 @@ fun UpdateProductsScreen(navController: NavHostController,id:String) {
             .child("Products/$id")
         currentDataRef.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                var product = snapshot.getValue(Product::class.java)
+                var product = snapshot.getValue(House::class.java)
                 name = product!!.name
-                quantity = product!!.quantity
+                quantity = product!!.description
                 price = product!!.price
             }
 
