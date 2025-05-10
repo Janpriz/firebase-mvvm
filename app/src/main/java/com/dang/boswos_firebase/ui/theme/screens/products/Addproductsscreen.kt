@@ -21,10 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dang.boswos_firebase.R
 import com.dang.boswos_firebase.data.productviewmodel
 import com.dang.boswos_firebase.navigation.ROUTE_UPLOAD
 import com.dang.boswos_firebase.navigation.ROUTE_VIEW_PRODUCT
@@ -43,12 +47,14 @@ import com.dang.boswos_firebase.navigation.ROUTE_VIEW_PRODUCT
 
 @Composable
 fun AddProductsScreen(navController: NavHostController) {
-    Column(modifier = Modifier.fillMaxSize(),
+    Column(modifier = Modifier.fillMaxSize()
+        .paint(painter = painterResource(R.drawable.back), contentScale = ContentScale.FillBounds)
+        ,
         horizontalAlignment = Alignment.CenterHorizontally) {
         var context = LocalContext.current
         Spacer(modifier = Modifier.height(50.dp))
         Text(
-            text = "Add product",
+            text = "Add House",
             fontSize = 30.sp,
             fontFamily = FontFamily.Cursive,
             color = Color.Red,
@@ -67,7 +73,7 @@ fun AddProductsScreen(navController: NavHostController) {
         OutlinedTextField(
             value = productName,
             onValueChange = { productName = it },
-            label = { Text(text = "Product name *") },
+            label = { Text(text = "House name *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
@@ -76,7 +82,7 @@ fun AddProductsScreen(navController: NavHostController) {
         OutlinedTextField(
             value = productQuantity,
             onValueChange = { productQuantity = it },
-            label = { Text(text = "Product quantity *") },
+            label = { Text(text = "House description *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
@@ -85,7 +91,7 @@ fun AddProductsScreen(navController: NavHostController) {
         OutlinedTextField(
             value = productPrice,
             onValueChange = { productPrice = it },
-            label = { Text(text = "Product price *") },
+            label = { Text(text = "House price *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
@@ -148,7 +154,7 @@ fun ImagePicker(modifier: Modifier = Modifier, context: Context, navController: 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(onClick = {
-                navController.navigate(ROUTE_UPLOAD)
+
                 //-----------WRITE THE UPLOAD LOGIC HERE---------------//
                 var productRepository = productviewmodel(navController,context)
                 productRepository.saveProductWithImage(name, quantity, price,imageUri!!)

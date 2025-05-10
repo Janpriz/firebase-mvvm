@@ -2,7 +2,7 @@ package com.dang.boswos_firebase.ui.theme.screens.home
 
 
 
-import android.R
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.Navigation
 import androidx.navigation.compose.rememberNavController
+import com.dang.boswos_firebase.R
 import com.dang.boswos_firebase.navigation.ROUTE_ADD_PRODUCT
 import com.dang.boswos_firebase.navigation.ROUTE_HOME
 import com.dang.boswos_firebase.navigation.ROUTE_PROFILE
@@ -77,7 +79,9 @@ fun Homescreen(navController: NavHostController) {
         }
         Column(modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .paint(painter = painterResource(R.drawable.back), contentScale = ContentScale.FillBounds)
+            ,
             horizontalAlignment = Alignment.CenterHorizontally) {
             var context= LocalContext.current
 //        var productdata=productviewmodel(navController,context)

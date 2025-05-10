@@ -1,10 +1,11 @@
 package com.dang.boswos_firebase.ui.theme.screens
+import com.dang.boswos_firebase.R
 
-import android.R
 import android.graphics.Color.blue
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+//import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,15 +49,14 @@ fun StartScreen(navController: NavController){
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        //Circular Image
-//        Image(
-////            painter = painterResource(R.drawable.h),
-//            contentDescription = "home",
-//            modifier = Modifier
-//                .size(300.dp)
-//                .clip(shape = CircleShape),
-//            contentScale = ContentScale.Crop
-//        )
+        Image(
+            painter = painterResource(R.drawable.home),
+            contentDescription = "home",
+            modifier = Modifier
+                .size(300.dp)
+                .clip(shape = CircleShape),
+            contentScale = ContentScale.Crop
+        )
 
         //End
 

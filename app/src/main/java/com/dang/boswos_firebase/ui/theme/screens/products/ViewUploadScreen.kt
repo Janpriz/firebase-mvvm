@@ -210,7 +210,7 @@ fun ProductItem(product: Product) {
         Column(modifier = Modifier.padding(16.dp)) {
             AsyncImage(
                 model = product.picture,
-                contentDescription = "Product Image",
+                contentDescription = "House Image",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),

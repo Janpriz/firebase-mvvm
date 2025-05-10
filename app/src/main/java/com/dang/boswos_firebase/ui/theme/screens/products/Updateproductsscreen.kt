@@ -82,7 +82,7 @@ fun UpdateProductsScreen(navController: NavHostController,id:String) {
         OutlinedTextField(
             value = productName,
             onValueChange = { productName = it },
-            label = { Text(text = "Product name *") },
+            label = { Text(text = "House name *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
@@ -91,7 +91,7 @@ fun UpdateProductsScreen(navController: NavHostController,id:String) {
         OutlinedTextField(
             value = productQuantity,
             onValueChange = { productQuantity = it },
-            label = { Text(text = "Product quantity *") },
+            label = { Text(text = "House description *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
@@ -100,7 +100,7 @@ fun UpdateProductsScreen(navController: NavHostController,id:String) {
         OutlinedTextField(
             value = productPrice,
             onValueChange = { productPrice = it },
-            label = { Text(text = "Product price *") },
+            label = { Text(text = "House price *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
