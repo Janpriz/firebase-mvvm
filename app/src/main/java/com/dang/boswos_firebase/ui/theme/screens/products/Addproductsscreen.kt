@@ -48,7 +48,7 @@ import com.dang.boswos_firebase.navigation.ROUTE_VIEW_PRODUCT
 @Composable
 fun AddProductsScreen(navController: NavHostController) {
     Column(modifier = Modifier.fillMaxSize()
-        .paint(painter = painterResource(R.drawable.back), contentScale = ContentScale.FillBounds)
+//        .paint(painter = painterResource(R.drawable.back), contentScale = ContentScale.FillBounds)
         ,
         horizontalAlignment = Alignment.CenterHorizontally) {
         var context = LocalContext.current
@@ -73,7 +73,7 @@ fun AddProductsScreen(navController: NavHostController) {
         OutlinedTextField(
             value = productName,
             onValueChange = { productName = it },
-            label = { Text(text = "House name *") },
+            label = { Text(text = "House name *",color = Color.Black) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
@@ -82,7 +82,7 @@ fun AddProductsScreen(navController: NavHostController) {
         OutlinedTextField(
             value = productQuantity,
             onValueChange = { productQuantity = it },
-            label = { Text(text = "House description *") },
+            label = { Text(text = "House description *",color = Color.Black) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
@@ -91,7 +91,7 @@ fun AddProductsScreen(navController: NavHostController) {
         OutlinedTextField(
             value = productPrice,
             onValueChange = { productPrice = it },
-            label = { Text(text = "House price *") },
+            label = { Text(text = "House price *", color = Color.Black) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 

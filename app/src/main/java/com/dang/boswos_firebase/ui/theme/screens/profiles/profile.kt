@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.res.painterResource
@@ -56,6 +57,7 @@ fun ProfileScreen(navController: NavHostController) {
     var isEditing by remember { mutableStateOf(false) }
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var profilePictureUrl by remember { mutableStateOf("") }
 
     val user = auth.currentUser
 
@@ -66,7 +68,7 @@ fun ProfileScreen(navController: NavHostController) {
     // Fetch user data from Firestore when the profile screen is loaded
     LaunchedEffect(user?.uid) {
         user?.uid?.let {
-            db.collection("users")
+            db.collection("UserProfile")
                 .document(it)
                 .get()
                 .addOnSuccessListener { document ->
@@ -75,6 +77,7 @@ fun ProfileScreen(navController: NavHostController) {
                         userProfile = userData
                         name = userData?.name ?: ""
                         email = userData?.email ?: ""
+                        profilePictureUrl=userData?.profilePictureUrl ?: ""
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -88,7 +91,9 @@ fun ProfileScreen(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+
     ) {
         // Profile Image
         userProfile?.profilePictureUrl?.let { imageUrl ->
@@ -103,7 +108,7 @@ fun ProfileScreen(navController: NavHostController) {
         } ?: run {
             // Placeholder image if there's no profile picture URL
             Image(
-                painter = painterResource(id = (R.drawable.home)), // Replace with your image
+                painter = painterResource(id = (R.drawable.profile)), // Replace with your image
                 contentDescription = "Profile Placeholder",
                 modifier = Modifier
                     .size(120.dp)
@@ -121,13 +126,13 @@ fun ProfileScreen(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth()
             )
         } else {
-            Text(text = name, style = MaterialTheme.typography.h5)
+            Text(text = name, style = MaterialTheme.typography.h5, color = Color.Black)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Email
-        Text(text = email, style = MaterialTheme.typography.body1)
+        Text(text = email, style = MaterialTheme.typography.body1, color = Color.Black)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -169,3 +174,4 @@ private fun Profilepreview() {
     ProfileScreen(rememberNavController())
 
 }
+

@@ -60,7 +60,7 @@ fun LoginScreen(navController:NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(value =email , onValueChange = {email=it},
-            label = { Text(text = "Enter Email") },
+            label = { Text(text = "Enter Email",color = Color.Black) },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             modifier = Modifier
                 .fillMaxWidth()
@@ -70,22 +70,13 @@ fun LoginScreen(navController:NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(value =pass , onValueChange = {pass=it},
-            label = { Text(text = "Enter Password") },
+            label = { Text(text = "Enter Password",color = Color.Black) },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         )
-        Spacer(modifier = Modifier.height(20.dp))
 
-        OutlinedTextField(value =username , onValueChange = {username=it},
-            label = { Text(text = "Enter Username") },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-
-            )
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {

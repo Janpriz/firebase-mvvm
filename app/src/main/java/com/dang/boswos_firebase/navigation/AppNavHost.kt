@@ -1,7 +1,7 @@
 package com.dang.boswos_firebase.navigation
 
 import ViewUploadScreen
-import com.dang.boswos_firebase.ui.theme.screens.profiles.ProfileScreen
+//import com.dang.boswos_firebase.ui.theme.screens.profiles.ProfileScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,8 +17,10 @@ import com.dang.boswos_firebase.ui.theme.screens.products.AddProductsScreen
 import com.dang.boswos_firebase.ui.theme.screens.products.UpdateProductsScreen
 import com.dang.boswos_firebase.ui.theme.screens.products.UploadScreen
 import com.dang.boswos_firebase.ui.theme.screens.products.ViewProductsScreen
+import com.dang.boswos_firebase.ui.theme.screens.profiles.ProfileScreen
 //import com.dang.boswos_firebase.ui.theme.screens.products.ViewUploadsScreen
 import com.dang.boswos_firebase.ui.theme.screens.register.RegisterScreen
+
 
 
 @Composable

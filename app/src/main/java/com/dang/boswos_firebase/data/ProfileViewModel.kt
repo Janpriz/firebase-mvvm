@@ -1,4 +1,3 @@
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.dang.boswos_firebase.model.User
@@ -7,7 +6,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfileViewModel : ViewModel() {
     private val _userProfile = mutableStateOf<User?>(null)
-    val userProfile: State<User?> = _userProfile
 
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
