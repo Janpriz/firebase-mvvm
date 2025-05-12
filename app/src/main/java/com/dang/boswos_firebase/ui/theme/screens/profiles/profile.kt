@@ -1,7 +1,7 @@
 package com.dang.boswos_firebase.ui.theme.screens.profiles
 
 //noinspection SuspiciousImport
-import android.R
+
 import android.widget.Toast
 import androidx.compose.foundation.Image
 
@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
+import com.dang.boswos_firebase.R
 import com.dang.boswos_firebase.data.UserProfile
 
 import com.google.firebase.auth.FirebaseAuth
@@ -102,7 +103,7 @@ fun ProfileScreen(navController: NavHostController) {
         } ?: run {
             // Placeholder image if there's no profile picture URL
             Image(
-                painter = painterResource(id = (R.drawable.picture_frame)), // Replace with your image
+                painter = painterResource(id = (R.drawable.home)), // Replace with your image
                 contentDescription = "Profile Placeholder",
                 modifier = Modifier
                     .size(120.dp)
