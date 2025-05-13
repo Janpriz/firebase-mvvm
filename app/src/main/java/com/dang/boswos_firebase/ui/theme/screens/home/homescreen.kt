@@ -90,7 +90,7 @@ fun Homescreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(text = "Welcome to Home page",
-                color = Color.Cyan,
+                color = Color.Black,
                 fontFamily = FontFamily.Cursive,
                 fontSize = 30.sp)
 //            Spacer(modifier = Modifier.height(50.dp))

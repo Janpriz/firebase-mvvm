@@ -41,8 +41,9 @@ fun RegisterScreen(navController:NavHostController) {
     var context= LocalContext.current
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(Color.Cyan),
+        .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.height(50.dp))
 
         Text(text = "Register here",
             color = Color.Cyan,
@@ -72,7 +73,7 @@ fun RegisterScreen(navController:NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
         OutlinedTextField(value =confirmpass , onValueChange = {
             confirmpass=it},
-            label = { Text(text = "Enter Confirm Pass") },
+            label = { Text(text = "Confirm Pass") },
 
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             modifier = Modifier

@@ -1,7 +1,6 @@
 package com.dang.boswos_firebase.ui.theme.screens.products
 
 import House
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,19 +8,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,13 +67,16 @@ fun ViewProductsScreen(navController: NavHostController) {
                 ) {
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         items(products) {
-                            ProductItem(
-                                name = it.name,
+                            ProductCard(
+                                 name = it.name,
                                 description = it.description,
                                 price = it.price,
-                                imageUrl = it.imageUrl, // Pass the imageUrl to ProductItem
+                                imageUrl = it.imageUrl,
                                 id = it.id,
                                 navController = navController,
                                 productRepository = productRepository
@@ -94,44 +90,50 @@ fun ViewProductsScreen(navController: NavHostController) {
 }
 
 @Composable
-fun ProductItem(
+fun ProductCard(
     name: String,
     description: String,
     price: String,
-    imageUrl: String, // Added imageUrl parameter
+    imageUrl: String,
     id: String,
     navController: NavHostController,
     productRepository: productviewmodel
 ) {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Text(text = "Name: $name", fontSize = 18.sp, color = Color.Black)
-        Text(text = "Description: $description", fontSize = 16.sp, color = Color.DarkGray)
-        Text(text = "Price: $price", fontSize = 16.sp, color = Color.Green)
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(text = "Name: $name", fontSize = 18.sp, color = Color.Black)
+            Text(text = "Description: $description", fontSize = 16.sp, color = Color.DarkGray)
+            Text(text = "Price: $price", fontSize = 16.sp, color = Color.Green)
 
-        // Display the product image
-        if (imageUrl.isNotEmpty()) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = "Product Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(top = 8.dp, bottom = 8.dp),
-                contentScale = ContentScale.Crop
-            )
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Button(onClick = { productRepository.deleteProduct(id) }) {
-                Text(text = "Delete")
+            // Display the product image
+            if (imageUrl.isNotEmpty()) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = "Product Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop
+                )
             }
-            Button(onClick = { navController.navigate(ROUTE_UPDATE_PRODUCT + "/$id") }) {
-                Text(text = "Update")
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                Button(onClick = { productRepository.deleteProduct(id) }) {
+                    Text(text = "Delete")
+                }
+                Button(onClick = { navController.navigate(ROUTE_UPDATE_PRODUCT + "/$id") }) {
+                    Text(text = "Update")
+                }
             }
         }
     }
