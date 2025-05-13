@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dang.boswos_firebase.data.productviewmodel
-import com.dang.boswos_firebase.model.House
+
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

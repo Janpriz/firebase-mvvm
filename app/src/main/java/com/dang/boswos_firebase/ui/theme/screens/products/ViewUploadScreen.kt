@@ -1,231 +1,164 @@
-//package com.dang.boswos_firebase.ui.theme.screens.products
-//
-//
-//import androidx.compose.foundation.Image
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.lazy.LazyColumn
-//import androidx.compose.foundation.lazy.items
-//import androidx.compose.material3.Button
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.mutableStateListOf
-//import androidx.compose.runtime.mutableStateOf
-//import androidx.compose.runtime.remember
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.platform.LocalContext
-//import androidx.compose.ui.text.font.FontFamily
-//import androidx.compose.ui.tooling.preview.Preview
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import androidx.navigation.NavHostController
-//import androidx.navigation.compose.rememberNavController
-//import coil.compose.rememberAsyncImagePainter
-//import com.dang.boswos_firebase.data.productviewmodel
-//import com.dang.boswos_firebase.model.Upload
-//import com.dang.boswos_firebase.navigation.ROUTE_UPDATE_PRODUCT
-//
-//
-//@Composable
-//fun ViewUploadsScreen(navController:NavHostController) {
-//    Column(modifier = Modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally) {
-//
-//        var context = LocalContext.current
-//        var productRepository = productviewmodel(navController, context)
-//
-//
-//        val emptyUploadState = remember { mutableStateOf(Upload("","","","","")) }
-//        var emptyUploadsListState = remember { mutableStateListOf<Upload>() }
-//
-//        var uploads = productRepository.viewUploads(emptyUploadState, emptyUploadsListState)
-//
-//
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize(),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            Text(text = "All uploads",
-//                fontSize = 30.sp,
-//                fontFamily = FontFamily.Cursive,
-//                color = Color.Red)
-//
-//            Spacer(modifier = Modifier.height(20.dp))
-//
-//            LazyColumn(){
-//                items(uploads){
-//                    UploadItem(
-//                        name = it.name,
-//                        description = it.description,
-//                        price = it.price,
-//                        imageUrl = it.imageUrl,
-//                        id = it.id,
-//                        navController = navController,
-//                        productRepository = productRepository
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//
-//@Composable
-//fun UploadItem(name:String, description:String, price:String, imageUrl:String, id:String,
-//               navController:NavHostController, productRepository:productviewmodel) {
-//
-//    Column(modifier = Modifier.fillMaxWidth()) {
-//        Text(text = name)
-//        Text(text = description)
-//        Text(text = price)
-//        Image(
-//            painter = rememberAsyncImagePainter(imageUrl),
-//            contentDescription = null,
-//            modifier = Modifier.size(128.dp)
-//        )
-//        Button(onClick = {
-//            productRepository.deleteProduct(id)
-//        }) {
-//            Text(text = "Delete")
-//        }
-//        Button(onClick = {
-//            navController.navigate(ROUTE_UPDATE_PRODUCT+"/$id")
-//        }) {
-//            Text(text = "Update")
-//        }
-//    }
-//}
-//
-//@Preview
-//@Composable
-//private fun preview() {
-//    ViewProductsScreen(rememberNavController())
-//
-//}
-import android.R
+package com.dang.boswos_firebase.ui.theme.screens.products
+
+import House
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import com.dang.boswos_firebase.model.House
-//import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import coil.transform.CircleCropTransformation
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
+import com.dang.boswos_firebase.data.productviewmodel
 
-data class Product(
-    val id: String = "",
-    val name: String = "",
-    val description: String = "",
-    val price: Double = 0.0,
-    val picture: String = "" // Ensures we have an image URL field
-)
+import com.dang.boswos_firebase.navigation.ROUTE_HOME
+import androidx.core.net.toUri
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewUploadScreen(userId: String) {
-    val products = remember { mutableStateListOf<Product>() }
-    var loading by remember { mutableStateOf(true) }
-    var error by remember { mutableStateOf<String?>(null) }
+fun ViewUploadScreen(navController: NavHostController) {
+    var productList by remember { mutableStateOf<List<House>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    val context = LocalContext.current
 
-    // Fetch products from Firestore
     LaunchedEffect(Unit) {
+        val productRepo = productviewmodel(navController, context) // Ensure this is implemented correctly
         try {
-            val db = FirebaseFirestore.getInstance()
-            val querySnapshot = db.collection("products")
-                .whereEqualTo("userId", userId) // Fetch products uploaded by the user
-                .get()
-                .await()
-
-            val fetchedProducts = querySnapshot.documents.map { document ->
-                Product(
-                    id = document.id,
-                    name = document.getString("name") ?: "",
-                    description = document.getString("description") ?: "",
-                    price = document.getDouble("price") ?: 0.0,
-                    picture = document.getString("imageUrl") ?: "" // Ensure imageUrl is fetched
-                )
-            }
-            products.addAll(fetchedProducts)
-            loading = false
+            val products = productRepo.getProducts() // Fetch products from the repository
+            productList = products
         } catch (e: Exception) {
-            error = e.message
-            loading = false
+            Toast.makeText(context, "Failed to load houses: ${e.message}", Toast.LENGTH_SHORT).show()
+        } finally {
+            isLoading = false
         }
     }
 
-    // UI Rendering
-    if (loading) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Uploaded Houses")
+                },
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back Arrow",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable {
+                                // Navigate back to the home screen
+                                navController.navigate(ROUTE_HOME) {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                                }
+                            }
+                    )
+                },
+                actions = {
+                    Icon(
+                        imageVector = Icons.Default.Phone,
+                        contentDescription = "Phone Icon",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable {
+                                // Open the phone dialer with a specific phone number
+                                val intent = Intent(Intent.ACTION_DIAL).apply {
+                                    data = "0704585732".toUri() // Replace with your phone number
+                                }
+                                context.startActivity(intent)
+                            }
+                    )
+                },
+                colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFFFFA500), // Orange color
+                    titleContentColor = Color.White, // Title color
+                    navigationIconContentColor = Color.White, // Back arrow color
+                    actionIconContentColor = Color.White // Phone icon color
+                )
+            )
         }
-    } else if (error != null) {
+    ) { innerPadding ->
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "Error: $error")
-        }
-    } else {
-        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(innerPadding)
         ) {
-            items(products) { product ->
-                ProductItem(product = product)
-                Spacer(modifier = Modifier.height(16.dp))
+            if (isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Loading houses...")
+                }
+            } else if (productList.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "No houses available.")
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(productList) { product ->
+                        ProductCard(product)
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun ProductItem(product: Product) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(4.dp)
+fun ProductCard(product: House) {
+    androidx.compose.material3.Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            AsyncImage(
-                model = product.picture,
-                contentDescription = "House Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                placeholder = rememberAsyncImagePainter(R.drawable.presence_away), // Add placeholder drawable
-                error = rememberAsyncImagePainter(R.drawable.ic_menu_agenda), // Add error drawable
-                contentScale = ContentScale.Crop // Ensures proper cropping for images
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
-            Text(text = product.description, style = MaterialTheme.typography.bodyMedium)
-            Text(
-                text = String.format("$%.2f", product.price),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Display the product name
+            Text(text = product.name, fontSize = 20.sp)
+
+            // Display the product description
+            Text(text = "Description: ${product.description}")
+
+            // Display the product price
+            Text(text = "Price: ${product.price}", fontSize = 16.sp)
+
+            // Display the product image if the URL is not null or empty
+            if (product.imageUrl.isNotEmpty()) {
+                Image(
+                    painter = rememberAsyncImagePainter(product.imageUrl),
+                    contentDescription = "Product Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
     }
 }

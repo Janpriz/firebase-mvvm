@@ -17,11 +17,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
-import com.dang.boswos_firebase.model.House
+
 import com.dang.boswos_firebase.model.Upload
 
 @Composable
 fun ProductItem(upload: Upload,navControler: NavHostController) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()

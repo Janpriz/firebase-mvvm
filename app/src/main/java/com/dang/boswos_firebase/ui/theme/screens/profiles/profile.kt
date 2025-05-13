@@ -68,7 +68,7 @@ fun ProfileScreen(navController: NavHostController) {
     // Fetch user data from Firestore when the profile screen is loaded
     LaunchedEffect(user?.uid) {
         user?.uid?.let {
-            db.collection("UserProfile")
+            db.collection("users")
                 .document(it)
                 .get()
                 .addOnSuccessListener { document ->

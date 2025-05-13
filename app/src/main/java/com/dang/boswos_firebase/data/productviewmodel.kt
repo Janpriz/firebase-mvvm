@@ -1,13 +1,17 @@
 package com.dang.boswos_firebase.data
 
+import House
 import android.app.ProgressDialog
+import androidx.lifecycle.viewModelScope
+
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation.NavHostController
-import com.dang.boswos_firebase.model.House
+
 
 import com.dang.boswos_firebase.model.Upload
 import com.dang.boswos_firebase.navigation.ROUTE_LOGIN
@@ -17,7 +21,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 
 class productviewmodel(var navController: NavHostController, var context: Context) {
@@ -106,27 +114,31 @@ class productviewmodel(var navController: NavHostController, var context: Contex
         }
     }
 
-    fun saveProductWithImage(houseName:String, housedescription:String, housePrice:String, filePath: Uri){
-        var id = System.currentTimeMillis().toString()
-        var storageReference = FirebaseStorage.getInstance().getReference().child("Uploads/$id")
-        progress.show()
+    fun saveProductWithImage(name: String, description: String, price: String, imageUri: Uri) {
+        val storageRef = FirebaseStorage.getInstance().reference.child("products/${UUID.randomUUID()}.jpg")
+        val uploadTask = storageRef.putFile(imageUri)
 
-        storageReference.putFile(filePath).addOnCompleteListener{
-            progress.dismiss()
-            if (it.isSuccessful){
-                // Proceed to store other data into the db
-                storageReference.downloadUrl.addOnSuccessListener {
-                    var imageUrl = it.toString()
-                    var houseData = Upload(houseName,housedescription,
-                        housePrice,imageUrl,id)
-                    var dbRef = FirebaseDatabase.getInstance()
-                        .getReference().child("Uploads/$id")
-                    dbRef.setValue(houseData)
-                    Toast.makeText(context, "Upload successful", Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                Toast.makeText(context, it.exception!!.message, Toast.LENGTH_SHORT).show()
+        uploadTask.addOnSuccessListener {
+            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                // Save product details along with the image URL
+                val product = mapOf(
+                    "name" to name,
+                    "description" to description,
+                    "price" to price,
+                    "imageUrl" to uri.toString()
+                )
+
+                FirebaseFirestore.getInstance().collection("house")
+                    .add(product)
+                    .addOnSuccessListener {
+                        // Successfully saved product
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Error", "Failed to save house: ${e.message}")
+                    }
             }
+        }.addOnFailureListener { e ->
+            Log.e("Error", "Failed to upload image: ${e.message}")
         }
     }
 
@@ -152,6 +164,29 @@ class productviewmodel(var navController: NavHostController, var context: Contex
         })
         return uploads
     }
+    suspend fun getProducts(): List<House> {
+        val db = FirebaseFirestore.getInstance()
+        val productList = mutableListOf<House>()
+
+        try {
+            // Fetch data from the "houses" collection in Firestore
+            val snapshot = db.collection("house").get().await()
+            for (document in snapshot.documents) {
+                val house = document.toObject(House::class.java)
+                if (house != null) {
+                    house.id = document.id // Assign document ID as the house ID
+                    productList.add(house)
+                }
+            }
+        } catch (e: Exception) {
+            // Log or handle the error
+            println("Error fetching products: ${e.message}")
+        }
+
+        return productList
+    }
+
+
 
 
 }

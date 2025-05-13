@@ -1,176 +1,206 @@
 package com.dang.boswos_firebase.ui.theme.screens.products
 
 import android.content.Context
-import android.content.res.Configuration
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
-
 import androidx.compose.material3.Text
-
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.input.pointer.motionEventSpy
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.dang.boswos_firebase.R
 import com.dang.boswos_firebase.data.productviewmodel
-import com.dang.boswos_firebase.navigation.ROUTE_UPLOAD
 import com.dang.boswos_firebase.navigation.ROUTE_VIEW_PRODUCT
-//import com.dang.boswos_firebase.navigation.ROUTE_upload
+
+import com.dang.boswos_firebase.navigation.ROUTE_VIEW_UPLOAD
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddProductsScreen(navController: NavHostController) {
-    Column(modifier = Modifier.fillMaxSize()
-//        .paint(painter = painterResource(R.drawable.back), contentScale = ContentScale.FillBounds)
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        var context = LocalContext.current
-        Spacer(modifier = Modifier.height(50.dp))
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val context = LocalContext.current
         Text(
-            text = "Add House",
+            text = "Add Product",
             fontSize = 30.sp,
-            fontFamily = FontFamily.Cursive,
-            color = Color.Red,
-            modifier = Modifier.padding(20.dp),
-            fontWeight = FontWeight.Bold,
-            textDecoration = TextDecoration.Underline
+            modifier = Modifier.padding(20.dp)
         )
 
-        var productName by remember { mutableStateOf(TextFieldValue("")) }
-        var productQuantity by remember { mutableStateOf(TextFieldValue("")) }
-        var productPrice by remember { mutableStateOf(TextFieldValue("")) }
-        var picture by remember { mutableStateOf(TextFieldValue("")) }
-
-
+        var productName by remember { mutableStateOf("") }
+        var productDescription by remember { mutableStateOf("") }
+        var productPrice by remember { mutableStateOf("") }
 
         OutlinedTextField(
             value = productName,
             onValueChange = { productName = it },
-            label = { Text(text = "House name *",color = Color.Black) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            label = { Text(text = "Product Name *") },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
         )
-
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
-            value = productQuantity,
-            onValueChange = { productQuantity = it },
-            label = { Text(text = "House description *",color = Color.Black) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            value = productDescription,
+            onValueChange = { productDescription = it },
+            label = { Text(text = "Description *") },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
         )
-
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
             value = productPrice,
             onValueChange = { productPrice = it },
-            label = { Text(text = "House price *", color = Color.Black) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            label = { Text(text = "Price *") },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        ImagePicker(
+            context = context,
+            navController = navController,
+            productName = productName,
+            productDescription = productDescription,
+            productPrice = productPrice
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // Add Save Button to Save Product
         Button(onClick = {
-            //-----------WRITE THE SAVE LOGIC HERE---------------//
-            var productRepository = productviewmodel(navController,context)
-            productRepository.saveProduct(productName.text.trim(),productQuantity.text.trim(),
-                productPrice.text)
-            navController.navigate(ROUTE_VIEW_PRODUCT)
-
-
+            if (productName.isBlank() || productDescription.isBlank() || productPrice.isBlank()) {
+                Toast.makeText(context, "All fields are required!", Toast.LENGTH_SHORT).show()
+            } else {
+                saveProduct(
+                    context = context,
+                    navController = navController,
+                    name = productName.trim(),
+                    description = productDescription.trim(),
+                    price = productPrice.trim()
+                )
+            }
         }) {
-            Text(text = "Save")
+            Text(text = "Save Product")
         }
-        Spacer(modifier = Modifier.height(20.dp))
-
-        //---------------------IMAGE PICKER START-----------------------------------//
-
-        ImagePicker(Modifier,context,
-            navController, productName.text.trim(), productQuantity.text.trim(), productPrice.text.trim())
-
-        //---------------------IMAGE PICKER END-----------------------------------//
-
     }
 }
 
 @Composable
-fun ImagePicker(modifier: Modifier = Modifier, context: Context, navController: NavHostController, name:String, quantity:String, price:String) {
-    var hasImage by remember { mutableStateOf(false) }
+fun ImagePicker(
+    context: Context,
+    navController: NavHostController,
+    productName: String,
+    productDescription: String,
+    productPrice: String
+) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var hasImage by remember { mutableStateOf(false) }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            hasImage = uri != null
             imageUri = uri
+            hasImage = uri != null
         }
     )
 
-    Column(modifier = modifier,) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         if (hasImage && imageUri != null) {
-            val bitmap = MediaStore.Images.Media.
-            getBitmap(context.contentResolver,imageUri)
-            Image(bitmap = bitmap.asImageBitmap(), contentDescription = "Selected image")
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, imageUri!!))
+            } else {
+                MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
+            }
+            Image(bitmap = bitmap.asImageBitmap(), contentDescription = "Selected Image")
         }
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp), horizontalAlignment = Alignment.CenterHorizontally,) {
-            Button(
-                onClick = {
-                    imagePicker.launch("image/*")
-                },
-            ) {
-                Text(
-                    text = "Select Image"
+
+        Button(
+            onClick = { imagePicker.launch("image/*") },
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text(text = "Select Image")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(onClick = {
+            if (productName.isBlank() || productDescription.isBlank() || productPrice.isBlank() || imageUri == null) {
+                Toast.makeText(context, "All fields and image are required!", Toast.LENGTH_SHORT).show()
+            } else {
+                uploadProduct(
+                    context = context,
+                    navController = navController,
+                    name = productName.trim(),
+                    description = productDescription.trim(),
+                    price = productPrice.trim(),
+                    imageUri = imageUri!!
                 )
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(onClick = {
-
-                //-----------WRITE THE UPLOAD LOGIC HERE---------------//
-                var productRepository = productviewmodel(navController,context)
-                productRepository.saveProductWithImage(name, quantity, price,imageUri!!)
-
-
-            }) {
-                Text(text = "Upload")
-            }
+        }) {
+            Text(text = "Upload")
         }
     }
 }
 
+fun saveProduct(
+    context: Context,
+    navController: NavHostController,
+    name: String,
+    description: String,
+    price: String
+) {
+    val productRepo = productviewmodel(navController, context)
+    MainScope().launch {
+        try {
+            productRepo.saveProduct(name, description, price)
+            Toast.makeText(context, "Product saved successfully!", Toast.LENGTH_SHORT).show()
+            navController.navigate(ROUTE_VIEW_PRODUCT) // Navigate to saved products screen
+        } catch (e: Exception) {
+            Toast.makeText(context, "Save failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
 
-@Preview
-@Composable
-fun Addpr() {
-    AddProductsScreen(rememberNavController())
-
+fun uploadProduct(
+    context: Context,
+    navController: NavHostController,
+    name: String,
+    description: String,
+    price: String,
+    imageUri: Uri
+) {
+    val productRepo = productviewmodel(navController, context)
+    MainScope().launch {
+        try {
+            productRepo.saveProductWithImage(name, description, price, imageUri)
+            Toast.makeText(context, "Product uploaded successfully!", Toast.LENGTH_SHORT).show()
+            navController.navigate(ROUTE_VIEW_UPLOAD)
+        } catch (e: Exception) {
+            Toast.makeText(context, "Upload failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
 }

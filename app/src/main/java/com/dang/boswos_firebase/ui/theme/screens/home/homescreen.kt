@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -92,38 +93,38 @@ fun Homescreen(navController: NavHostController) {
                 color = Color.Cyan,
                 fontFamily = FontFamily.Cursive,
                 fontSize = 30.sp)
-            Spacer(modifier = Modifier.height(50.dp))
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Gray),
-
-                border = BorderStroke(1.dp, Color.Blue),
-//                modifier = paddingModifier
-                elevation = CardDefaults.cardElevation(8.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),  // Optional padding inside the Box
-
-                    contentAlignment = Alignment.Center // This will center the content (buttons)
-                ){
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-
-                    // Space between buttons
-                    ){
-                        Button(onClick = {
-                            navController.navigate(ROUTE_ADD_PRODUCT)
-                        },modifier = Modifier.fillMaxWidth()) {
-                            Text(text = "Add House")
-                        }
-                    }
-                }
-            }
+//            Spacer(modifier = Modifier.height(50.dp))
+//            Card(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(150.dp),
+//                colors = CardDefaults.cardColors(containerColor = Color.Gray),
+//
+//                border = BorderStroke(1.dp, Color.Blue),
+////                modifier = paddingModifier
+//                elevation = CardDefaults.cardElevation(8.dp)
+//            ) {
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(16.dp),  // Optional padding inside the Box
+//
+//                    contentAlignment = Alignment.Center // This will center the content (buttons)
+//                ){
+//                    Column(
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                        verticalArrangement = Arrangement.spacedBy(16.dp),
+//
+//                    // Space between buttons
+//                    ){
+////                        Button(onClick = {
+////                            navController.navigate(ROUTE_ADD_PRODUCT)
+////                        },modifier = Modifier.fillMaxWidth()) {
+////                            Text(text = "Add House")
+////                        }
+//                    }
+//                }
+//            }
 
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -213,10 +214,10 @@ fun BottomNavigationBar(selectedTab: String, onTabSelected: (String) -> Unit,
             icon = { Icon(Icons.Default.Home, contentDescription = null) }
         )
         NavigationBarItem(
-            selected = selectedTab == "Profile",
-            onClick = { navController.navigate(ROUTE_PROFILE)},
-            label = { Text("Profile") },
-            icon = { Icon(Icons.Default.Person, contentDescription = null) }
+            selected = selectedTab == "Add",
+            onClick = { navController.navigate(ROUTE_ADD_PRODUCT)},
+            label = { Text("Add house") },
+            icon = { Icon(Icons.Default.Add, contentDescription = null) }
         )
     }
 }

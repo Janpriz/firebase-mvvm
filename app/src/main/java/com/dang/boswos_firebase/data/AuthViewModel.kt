@@ -11,6 +11,7 @@ import com.dang.boswos_firebase.navigation.ROUTE_LOGIN
 import com.dang.boswos_firebase.navigation.ROUTE_REGISTER
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.rpc.context.AttributeContext.Auth
 
 
 class AuthViewModel(var navController:NavHostController,var context:Context){
@@ -78,5 +79,32 @@ class AuthViewModel(var navController:NavHostController,var context:Context){
     fun isloggedin():Boolean{
         return mAuth.currentUser !=null
     }
+//    fun updateProfile(email: String, username: String, contact: String, location: String) {
+//
+//        val currentUser = Auth.currentUser
+//        if (currentUser == null) {
+//            Toast.makeText(context, "No user logged in.", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//
+//        val userId = currentUser.uid
+//
+//        val userUpdates = mapOf(
+//            "email" to email,
+//            "username" to username,
+//            "contact" to contact,
+//            "location" to location
+//        )
+//
+//        // Update Firestore database with new profile details
+//        db.collection("users").document(userId)
+//            .update(userUpdates)
+//            .addOnSuccessListener {
+//                Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+//            }
+//            .addOnFailureListener { e ->
+//                Toast.makeText(context, "Failed to update profile: ${e.message}", Toast.LENGTH_SHORT).show()
+//            }
+//    }
 
 }

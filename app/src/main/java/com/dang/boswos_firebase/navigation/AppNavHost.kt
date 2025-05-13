@@ -1,6 +1,6 @@
 package com.dang.boswos_firebase.navigation
 
-import ViewUploadScreen
+
 //import com.dang.boswos_firebase.ui.theme.screens.profiles.ProfileScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,7 +17,10 @@ import com.dang.boswos_firebase.ui.theme.screens.products.AddProductsScreen
 import com.dang.boswos_firebase.ui.theme.screens.products.UpdateProductsScreen
 import com.dang.boswos_firebase.ui.theme.screens.products.UploadScreen
 import com.dang.boswos_firebase.ui.theme.screens.products.ViewProductsScreen
+import com.dang.boswos_firebase.ui.theme.screens.products.ViewUploadScreen
+//import com.dang.boswos_firebase.ui.theme.screens.profile.ProfileScreen
 import com.dang.boswos_firebase.ui.theme.screens.profiles.ProfileScreen
+//import com.dang.boswos_firebase.ui.theme.screens.profiles.ProfileScreen
 //import com.dang.boswos_firebase.ui.theme.screens.products.ViewUploadsScreen
 import com.dang.boswos_firebase.ui.theme.screens.register.RegisterScreen
 
@@ -55,10 +58,11 @@ fun AppNavHost(modifier: Modifier=Modifier,
             UpdateProductsScreen(navController,passedData.arguments?.getString("id")!!)
         }
         composable(ROUTE_VIEW_UPLOAD){
-            ViewUploadScreen(navController.toString())
+            ViewUploadScreen(navController)
         }
         composable(ROUTE_PROFILE) {
-            ProfileScreen(navController)
+            ProfileScreen(
+                navController)
         }
         composable(ROUTE_UPLOAD) {
             UploadScreen(navController)
