@@ -1,21 +1,12 @@
 package com.dang.boswos_firebase.ui.theme.screens.products
 
-import android.content.res.Configuration
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,97 +22,107 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dang.boswos_firebase.data.productviewmodel
-
-
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.nio.file.WatchEvent
-
 
 @Composable
-fun UpdateProductsScreen(navController: NavHostController,id:String) {
-    Column(modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        var context = LocalContext.current
+fun UpdateProductsScreen(navController: NavHostController, id: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val context = LocalContext.current
+
+        // States to hold product details
         var name by remember { mutableStateOf("") }
-        var quantity by remember { mutableStateOf("") }
+        var description by remember { mutableStateOf("") }
         var price by remember { mutableStateOf("") }
 
-        var currentDataRef = FirebaseDatabase.getInstance().getReference()
-            .child("Products/$id")
-        currentDataRef.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var product = snapshot.getValue(House::class.java)
-                name = product!!.name
-                quantity = product!!.description
-                price = product!!.price
-            }
+        // Firebase reference to the specific product
+        val currentDataRef = FirebaseDatabase.getInstance().getReference("Products/$id")
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
+        // Load the current product data
+        LaunchedEffect(Unit) {
+            currentDataRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val product = snapshot.getValue(House::class.java)
+                    if (product != null) {
+                        name = product.name
+                        description = product.description
+                        price = product.price
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
         Spacer(modifier = Modifier.height(50.dp))
 
         Text(
-            text = "Add product",
+            text = "Update Product",
             fontSize = 30.sp,
             fontFamily = FontFamily.Monospace,
             color = Color.Blue,
-            modifier = Modifier.padding(20.dp),
             fontWeight = FontWeight.Bold,
             textDecoration = TextDecoration.Underline
         )
 
-        var productName by remember { mutableStateOf(TextFieldValue(name)) }
-        var productQuantity by remember { mutableStateOf(TextFieldValue(quantity)) }
-        var productPrice by remember { mutableStateOf(TextFieldValue(price)) }
+        Spacer(modifier = Modifier.height(20.dp))
 
+        // Text fields for editing product information
         OutlinedTextField(
-            value = productName,
-            onValueChange = { productName = it },
-            label = { Text(text = "House name *") },
+            value = name,
+            onValueChange = { name = it },
+            label = { Text(text = "House Name *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
-            value = productQuantity,
-            onValueChange = { productQuantity = it },
-            label = { Text(text = "House description *") },
+            value = description,
+            onValueChange = { description = it },
+            label = { Text(text = "House Description *") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
-            value = productPrice,
-            onValueChange = { productPrice = it },
-            label = { Text(text = "House price *") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            value = price,
+            onValueChange = { price = it },
+            label = { Text(text = "House Price *") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // Update button to save the product details
         Button(onClick = {
-            //-----------WRITE THE UPDATE LOGIC HERE---------------//
-            var productRepository = productviewmodel(navController, context)
-            productRepository.updateProduct(productName.text.trim(),productQuantity.text.trim(),
-                productPrice.text.trim(),id)
-
-
+            val productRepository = productviewmodel(navController, context)
+            productRepository.updateProduct(
+                name.trim(),
+                description.trim(),
+                price.trim(),
+                id
+            )
+            Toast.makeText(context, "House updated successfully", Toast.LENGTH_SHORT).show()
+            navController.popBackStack()
         }) {
             Text(text = "Update")
         }
-
     }
 }
 
 @Preview
 @Composable
-fun update() {
-    UpdateProductsScreen(rememberNavController(), id = "")
+fun PreviewUpdateProductsScreen() {
+    UpdateProductsScreen(rememberNavController(), id = "sampleId")
 }

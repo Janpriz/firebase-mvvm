@@ -81,7 +81,7 @@ fun ViewUploadScreen(navController: NavHostController) {
                             .clickable {
                                 // Open the phone dialer with a specific phone number
                                 val intent = Intent(Intent.ACTION_DIAL).apply {
-                                    data = "0704585732".toUri() // Replace with your phone number
+                                    data = Uri.parse("tel:0704585732") // Replace with your phone number
                                 }
                                 context.startActivity(intent)
                             }
