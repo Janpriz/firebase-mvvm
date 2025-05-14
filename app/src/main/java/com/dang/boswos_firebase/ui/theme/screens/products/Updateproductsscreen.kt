@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -14,7 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -104,19 +104,48 @@ fun UpdateProductsScreen(navController: NavHostController, id: String) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Update button to save the product details
-        Button(onClick = {
-            val productRepository = productviewmodel(navController, context)
-            productRepository.updateProduct(
-                name.trim(),
-                description.trim(),
-                price.trim(),
-                id
-            )
-            Toast.makeText(context, "House updated successfully", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
-        }) {
-            Text(text = "Update")
+        // Update and Delete buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                onClick = {
+                    // Update product logic
+                    val productRepository = productviewmodel(navController, context)
+                    productRepository.updateProduct(
+                        name.trim(),
+                        description.trim(),
+                        price.trim(),
+                        id
+                    )
+                    Toast.makeText(context, "House updated successfully", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
+                }
+            ) {
+                Text(text = "Update")
+            }
+
+//            Button(
+//                onClick = {
+//                    // Delete product logic
+//                    try {
+//                        currentDataRef.removeValue().addOnCompleteListener { task ->
+//                            if (task.isSuccessful) {
+//                                Toast.makeText(context, "House deleted successfully", Toast.LENGTH_SHORT).show()
+//                                navController.popBackStack() // Navigate back after deletion
+//                            } else {
+//                                Toast.makeText(context, "Failed to delete house", Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                    } catch (e: Exception) {
+//                        Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+//                    }
+//                },
+//                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+//            ) {
+//                Text(text = "Delete", color = Color.White)
+//            }
         }
     }
 }

@@ -125,6 +125,43 @@ fun ViewUploadScreen(navController: NavHostController) {
     }
 }
 
+//@Composable
+//fun ProductCard(product: House) {
+//    androidx.compose.material3.Card(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(8.dp),
+//        elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp),
+//            verticalArrangement = Arrangement.spacedBy(8.dp)
+//        ) {
+//            // Display the product name
+//            Text(text = product.name, fontSize = 20.sp)
+//
+//            // Display the product description
+//            Text(text = "Description: ${product.description}")
+//
+//            // Display the product price
+//            Text(text = "Price: ${product.price}", fontSize = 16.sp)
+//
+//            // Display the product image if the URL is not null or empty
+//            if (product.imageUrl.isNotEmpty()) {
+//                Image(
+//                    painter = rememberAsyncImagePainter(product.imageUrl),
+//                    contentDescription = "Product Image",
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(200.dp),
+//                    contentScale = ContentScale.Crop
+//                )
+//            }
+//        }
+//    }
+//}
 @Composable
 fun ProductCard(product: House) {
     androidx.compose.material3.Card(
@@ -133,31 +170,38 @@ fun ProductCard(product: House) {
             .padding(8.dp),
         elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Display the product name
-            Text(text = product.name, fontSize = 20.sp)
-
-            // Display the product description
-            Text(text = "Description: ${product.description}")
-
-            // Display the product price
-            Text(text = "Price: ${product.price}", fontSize = 16.sp)
-
             // Display the product image if the URL is not null or empty
             if (product.imageUrl.isNotEmpty()) {
                 Image(
                     painter = rememberAsyncImagePainter(product.imageUrl),
-                    contentDescription = "Product Image",
+                    contentDescription = "House Image",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
+                        .size(100.dp) // Fixed size for the image
+                        .aspectRatio(1f), // Maintain square aspect ratio
                     contentScale = ContentScale.Crop
                 )
+            }
+
+            // Display the product details in a Column beside the image
+            Column(
+                modifier = Modifier.weight(1f), // Take up remaining space
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Display the product name
+                Text(text = product.name, fontSize = 20.sp)
+
+                // Display the product description
+                Text(text = "Description: ${product.description}")
+
+                // Display the product price
+                Text(text = "Price: ${product.price}", fontSize = 16.sp)
             }
         }
     }

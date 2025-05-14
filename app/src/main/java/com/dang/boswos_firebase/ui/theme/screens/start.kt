@@ -63,7 +63,7 @@ fun StartScreen(navController: NavController){
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Find Your Order!!!",
+            text = "Find a house!!!",
             fontSize = 30.sp,
             fontWeight = FontWeight.ExtraBold,
             color = Color.Black

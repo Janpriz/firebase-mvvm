@@ -9,12 +9,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
+
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,6 +26,7 @@ import coil.compose.AsyncImage
 import com.dang.boswos_firebase.data.productviewmodel
 import com.dang.boswos_firebase.navigation.ROUTE_HOME
 import com.dang.boswos_firebase.navigation.ROUTE_UPDATE_PRODUCT
+import com.dang.boswos_firebase.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +79,7 @@ fun ViewProductsScreen(navController: NavHostController) {
                                  name = it.name,
                                 description = it.description,
                                 price = it.price,
-                                imageUrl = it.imageUrl,
+                                imageUri = it.imageUrl,
                                 id = it.id,
                                 navController = navController,
                                 productRepository = productRepository
@@ -88,13 +91,12 @@ fun ViewProductsScreen(navController: NavHostController) {
         )
     }
 }
-
 @Composable
 fun ProductCard(
     name: String,
     description: String,
     price: String,
-    imageUrl: String,
+    imageUri: String,
     id: String,
     navController: NavHostController,
     productRepository: productviewmodel
@@ -110,24 +112,28 @@ fun ProductCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+
             Text(text = "Name: $name", fontSize = 18.sp, color = Color.Black)
             Text(text = "Description: $description", fontSize = 16.sp, color = Color.DarkGray)
             Text(text = "Price: $price", fontSize = 16.sp, color = Color.Green)
 
-            // Display the product image
-            if (imageUrl.isNotEmpty()) {
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = "Product Image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            // Display the product image with placeholders for loading and error states
+            AsyncImage(
+                model = imageUri.toString(),
+                contentDescription = "House Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(R.drawable.houses), // Replace with your placeholder resource
+                error = painterResource(R.drawable.imefanya) // Replace with your error image resource
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Button(onClick = { productRepository.deleteProduct(id) }) {
                     Text(text = "Delete")
                 }
@@ -138,7 +144,6 @@ fun ProductCard(
         }
     }
 }
-
 @Preview
 @Composable
 fun view() {

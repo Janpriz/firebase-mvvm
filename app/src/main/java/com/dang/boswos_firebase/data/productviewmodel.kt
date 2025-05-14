@@ -84,10 +84,9 @@ class productviewmodel(var navController: NavHostController, var context: Contex
         })
         return houses
     }
-
     fun deleteProduct(id: String) {
         var delRef = FirebaseDatabase.getInstance().getReference()
-            .child("Houses/$id")
+            .child("House/$id")
         progress.show()
         delRef.removeValue().addOnCompleteListener {
             progress.dismiss()
@@ -98,6 +97,20 @@ class productviewmodel(var navController: NavHostController, var context: Contex
             }
         }
     }
+
+//    fun deleteProduct(id: String) {
+//        var delRef = FirebaseDatabase.getInstance().getReference()
+//            .child("Houses/$id")
+//        progress.show()
+//        delRef.removeValue().addOnCompleteListener {
+//            progress.dismiss()
+//            if (it.isSuccessful) {
+//                Toast.makeText(context, "House deleted", Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(context, it.exception!!.message, Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
 
     fun updateProduct(name: String, description: String, price: String, id: String) {
         var updateRef = FirebaseDatabase.getInstance().getReference()
